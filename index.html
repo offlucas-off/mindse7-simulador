@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Área de venda · Mindse7</title>
+<style>
+:root{
+  --pagina:#E3E4E5; --cartao:#FFFFFF; --tinta:#141414; --tinta2:#4A4B4D; --cinza:#F1F2F3; --cena:#F4F5F6;
+  --fio:#0B6E4F; --alerta:#A3231B; --ilhos:#B7B9BC; --papel:#F7F7F4; --ponto:#C3CAD2;
+  --sans:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  --cond:"Arial Narrow","Helvetica Neue Condensed","Roboto Condensed","Helvetica Neue",Arial,sans-serif;
+  --cota:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.2,.9,.2,1);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--pagina);color:var(--tinta);font:15px/1.45 var(--sans);overflow:hidden;display:flex;flex-direction:column;height:100vh}
+::selection{background:var(--tinta);color:#fff}
+:focus-visible{outline:3px solid var(--fio);outline-offset:2px}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.pula{position:absolute;left:8px;top:-200px;white-space:nowrap;z-index:50;background:var(--tinta);color:#fff;padding:10px 14px;font-weight:700}
+.pula:focus{top:8px}
+h1,h2,h3,h4{font-family:var(--cond);font-stretch:condensed;letter-spacing:-.01em;line-height:1.02;margin:0;text-transform:uppercase;font-weight:800}
+h1{font-size:24px} h2{font-size:21px} h3{font-size:16px;font-weight:700} h4{font:700 14px/1.2 var(--sans);text-transform:none;letter-spacing:0}
+button,input,select{font:inherit;color:inherit}
+button{-webkit-tap-highlight-color:transparent}
+*{scrollbar-width:thin;scrollbar-color:var(--tinta2) transparent}
+input[type=number],input[type=text],select{font:600 15px/1 var(--cota);font-variant-numeric:tabular-nums;width:100%;min-height:44px;border:1.5px solid var(--tinta);background:#fff;padding:0 30px 0 8px;border-radius:0}
+input[type=number]{-moz-appearance:textfield;appearance:textfield}
+input[type=number]::-webkit-inner-spin-button{display:none}
+input[type=text]{padding-right:8px;font-family:var(--sans);font-weight:600}
+.bt{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;min-width:44px;padding:0 12px;border:1.5px solid var(--tinta);background:#fff;cursor:pointer;font-weight:700;font-size:14px;white-space:nowrap}
+.bt:hover:not(:disabled){background:var(--tinta);color:#fff}
+.bt:disabled{opacity:.5;cursor:default}
+.bt[aria-pressed=true]{background:var(--tinta);color:#fff}
+.bt.perigo{color:var(--alerta);border-color:var(--alerta)}
+.bt.perigo:hover:not(:disabled){background:var(--alerta);color:#fff}
+.bt.primario{background:var(--tinta);color:#fff}
+.bt.primario:hover:not(:disabled){background:var(--fio);border-color:var(--fio)}
+.bt svg{width:18px;height:18px;flex:none}
+.sup{display:block;font:700 12px/1 var(--cota);letter-spacing:.04em;text-transform:uppercase;color:var(--tinta2);margin:0 0 6px}
+kbd{font:600 12px/1 var(--cota);border:1px solid var(--tinta2);padding:1px 4px;background:#fff}
+.ajuda{font-size:13px;color:var(--tinta2);margin:6px 0 0}
+.vazio{border:1.5px dashed var(--tinta);padding:12px;font-size:14px;margin:8px 0 0;background:var(--papel)}
+
+/* barra */
+.barra{display:flex;align-items:center;gap:8px;padding:6px 16px;background:var(--cartao);border-bottom:1.5px solid var(--tinta);flex-wrap:wrap}
+.barra .tit{margin-right:auto}
+.barra .proj{margin:0;font:600 13px/1.2 var(--sans);color:var(--tinta2)}
+.grupo{display:flex}
+.grupo .bt+.bt{border-left:0}
+
+/* três colunas: molde (faz) · prancheta · cartão (confere) */
+.mesa-trab{display:grid;grid-template-columns:minmax(232px,264px) minmax(0,1fr) minmax(312px,376px);flex:1;min-height:0}
+.col{min-height:0;overflow:auto;padding:14px 16px 24px}
+.molde-col{background-color:var(--papel);background-image:radial-gradient(circle,var(--ponto) 1px,transparent 1.3px);background-size:16px 16px;border-right:1.5px dashed var(--tinta)}
+.col h2{margin:4px 0 10px}
+.col h3{margin:16px 0 8px}
+.cartao-col{background:var(--cartao);border-left:1.5px solid var(--tinta);display:flex;flex-direction:column;min-height:0}
+.abas{display:flex;border-bottom:1.5px solid var(--tinta);position:relative;padding-top:0}
+.abas button{flex:1;white-space:nowrap;min-height:48px;border:0;border-right:1px solid var(--tinta);background:var(--cinza);cursor:pointer;font:800 15px/1 var(--cond);text-transform:uppercase;letter-spacing:.01em;position:relative}
+.abas button:last-child{border-right:0}
+.abas button[aria-selected=true]{background:#fff}
+.abas button[aria-selected=true]::after{content:"";position:absolute;left:0;right:0;bottom:-1.5px;height:4px;background:var(--tinta)}
+.abas .n{display:inline-block;min-width:20px;margin-left:6px;padding:2px 5px;border:1.5px solid var(--alerta);color:var(--alerta);font:700 12px/1 var(--cota)}
+.painel{flex:1;min-height:0;overflow:auto;padding:30px 16px 24px;position:relative}
+.painel::before{content:"";position:absolute;top:12px;left:16px;width:10px;height:10px;border-radius:50%;background:var(--pagina);box-shadow:0 0 0 3px var(--ilhos)}
+.painel>.sup:first-child{position:absolute;top:12px;left:36px}
+
+/* biblioteca */
+.biblio{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.biblio .bt{justify-content:flex-start;padding:4px 8px;min-height:48px;white-space:normal;text-align:left;line-height:1.1;font-size:13px}
+.biblio svg{width:24px;height:24px}
+.lista-itens{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.lista-itens button{width:100%;display:grid;grid-template-columns:1fr auto 22px;align-items:center;gap:8px;min-height:44px;padding:4px 8px;border:1.5px solid var(--tinta);background:#fff;cursor:pointer;text-align:left;font-weight:700;font-size:14px}
+.lista-itens button[aria-current=true]{background:var(--tinta);color:#fff}
+.lista-itens small{font:500 12px/1 var(--cota);font-variant-numeric:tabular-nums}
+.lista-itens svg{width:20px;height:20px}
+.legenda-molde{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--tinta);background:#fff}
+.legenda-molde label{display:block;padding:6px 8px;border-right:1px solid var(--tinta);border-bottom:1px solid var(--tinta);position:relative}
+.legenda-molde label:nth-child(2n){border-right:0}
+.legenda-molde b{display:block;font:700 12px/1 var(--cota);letter-spacing:.04em;text-transform:uppercase;color:var(--tinta2);margin-bottom:4px}
+.legenda-molde input{border:0;border-bottom:1.5px solid var(--tinta);min-height:36px;padding-left:0;background:transparent}
+.legenda-molde .un{position:absolute;right:10px;bottom:13px;font:600 12px/1 var(--cota);color:var(--tinta2)}
+.acoes{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+
+/* prancheta */
+.prancheta{display:flex;flex-direction:column;min-height:0;min-width:0;position:relative}
+.vistas{display:flex;align-items:center;gap:8px;padding:6px 12px;border-bottom:1.5px solid var(--tinta);background:var(--cartao);min-height:56px;flex-wrap:wrap}
+.vistas h2{font-size:17px;margin-right:auto}
+.vistas .fio-leg{display:flex;align-items:center;gap:6px;font:700 12px/1.1 var(--cota);color:var(--tinta2)}
+.vistas .fio-leg svg{width:34px;height:10px;flex:none}
+.vista{position:relative;min-height:0;display:flex;flex-direction:column}
+#v-planta{flex:1 1 55%;background-color:var(--papel)}
+#v-3d{flex:1 1 45%;border-top:1.5px solid var(--tinta);background:var(--cena)}
+.prancheta[data-vista=trocada] #v-planta{order:2;flex-basis:40%;border-top:1.5px solid var(--tinta)}
+.prancheta[data-vista=trocada] #v-3d{order:1;flex-basis:60%;border-top:0}
+.prancheta[data-vista=planta] #v-3d,.prancheta[data-vista=tres] #v-planta{display:none}
+.vista .rotulo{position:absolute;left:10px;top:8px;z-index:2;background:rgba(255,255,255,.92);border:1px solid var(--tinta);padding:3px 8px;font:700 12px/1.2 var(--cota);letter-spacing:.04em;text-transform:uppercase;pointer-events:none}
+.palco{position:relative;flex:1;min-height:0;overflow:hidden}
+#planta{position:absolute;inset:0;width:100%;height:100%;touch-action:none;user-select:none;-webkit-user-select:none}
+#cena{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;outline:0}
+#cena:focus-visible{outline:3px solid var(--fio);outline-offset:-3px}
+.dica-cena{position:absolute;right:10px;bottom:10px;font:13px/1.3 var(--sans);background:rgba(255,255,255,.92);border:1px solid var(--tinta);padding:4px 8px;max-width:calc(100% - 20px);pointer-events:none}
+.it{cursor:grab}
+.toast{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:6;max-width:min(560px,92%);background:var(--tinta);color:#fff;padding:10px 14px;font-size:14px;font-weight:600;pointer-events:none}
+
+/* trilho do guia */
+.trilho{position:relative;margin:8px 0 0;padding:12px 0 0;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity}
+.trilho::before{content:"";position:absolute;left:0;top:12px;height:5px;background:var(--tinta);border-radius:3px;min-width:100%;width:var(--w,100%)}
+.cabides{list-style:none;margin:0;padding:0;display:flex;gap:2px;position:relative}
+.cabide{flex:0 0 44px;min-height:132px;display:flex;flex-direction:column;align-items:center;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;position:relative;scroll-snap-align:start;transition:transform .16s var(--ease)}
+.cabide svg{width:44px;overflow:visible}
+.cabide .gancho{height:18px}
+.cabide .peca{height:86px;margin-top:-2px}
+.cabide .tam{font:700 12px/1 var(--cota);margin-top:4px;border:1.5px solid var(--tinta);padding:3px;background:#fff;min-width:30px;text-align:center}
+.cabide.pego{transform:translateY(-10px)}
+.cabide.pego .tam{background:var(--tinta);color:#fff}
+.cabide.sel .tam{background:var(--fio);border-color:var(--fio);color:#fff}
+.cabide:focus{outline:none}
+.cabide:focus-visible .tam{outline:3px solid var(--fio);outline-offset:2px}
+.cabide.corte::before{content:"";position:absolute;left:-3px;top:-6px;bottom:22px;border-left:2px dashed var(--tinta)}
+.cartela-arara{display:flex;margin:10px 0 0;height:26px;border:1.5px solid var(--tinta)}
+.cartela-arara i{flex:1 1 0;border-right:1px solid rgba(20,20,20,.3)}
+.cartela-arara i:last-child{border-right:0}
+.cartela-arara i.corte{border-left:4px solid var(--tinta)}
+.mover{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
+.sel-txt{font-size:13px;color:var(--tinta2);flex:1 1 140px}
+.pilhas{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}
+.pilhas li{display:grid;grid-template-columns:40px 1fr auto;gap:8px;align-items:center;border:1.5px solid var(--tinta);padding:4px 4px 4px 8px;background:#fff}
+.pilhas svg{width:36px}
+.pilhas b{display:block;font-size:14px}
+.pilhas small{font:500 12px/1.2 var(--cota);color:var(--tinta2)}
+
+/* catálogo: cartela de amostras */
+.catalogo{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.modelo{border:1.5px solid var(--tinta);display:grid;grid-template-columns:52px 1fr;gap:6px 10px;padding:8px;background:#fff}
+.modelo .arrasta{grid-row:1/5;width:52px;min-height:72px;border:1.5px dashed var(--tinta2);display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;background:var(--papel)}
+.modelo .arrasta svg{width:40px;height:66px}
+.modelo h4{margin:0}
+.modelo .modo{font:600 12px/1.2 var(--cota);color:var(--tinta2);display:flex;gap:4px;align-items:center}
+.modelo .modo svg{width:14px;height:14px}
+.opcoes{display:flex;flex-wrap:wrap;gap:4px}
+.opcoes button{min-width:44px;min-height:44px;border:1.5px solid var(--tinta);background:#fff;cursor:pointer;font:700 13px/1 var(--cota);padding:0 6px}
+.opcoes .cor{background:var(--c);width:44px}
+.opcoes .cor[aria-pressed=true]{box-shadow:inset 0 0 0 4px #fff,inset 0 0 0 7px var(--tinta)}
+.opcoes .tam[aria-pressed=true]{background:var(--tinta);color:#fff}
+.opcoes button:focus-visible{outline:3px solid var(--fio)!important;outline-offset:2px}
+.modelo .bt{grid-column:2;justify-self:start}
+.modelo .porque{grid-column:2;font-size:13px;color:var(--alerta);font-weight:600;margin:0}
+.fantasma{position:fixed;z-index:20;pointer-events:none;width:52px;height:72px;display:flex;align-items:center;justify-content:center;background:#fff;border:1.5px solid var(--tinta);left:0;top:0}
+.fantasma svg{width:40px;height:66px}
+.look{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}
+.look li{display:grid;grid-template-columns:36px 1fr auto;gap:8px;align-items:center;border:1.5px solid var(--tinta);padding:4px 4px 4px 8px;background:#fff}
+.look svg{width:30px;height:48px}
+.look small{font:500 12px/1.2 var(--cota);color:var(--tinta2);display:block}
+
+/* conferência: estado é forma */
+.nota{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:end;border:1.5px solid var(--tinta);padding:10px 12px;margin:0 0 10px;background:#fff}
+.nota b{font:800 56px/.9 var(--cond);font-variant-numeric:tabular-nums}
+.nota b small{font-size:22px;color:var(--tinta2)}
+.nota .placar{display:flex;gap:6px;flex-wrap:wrap}
+.placar span{display:inline-flex;align-items:center;gap:5px;font:700 12px/1 var(--cota);border:1.5px solid var(--tinta);padding:5px 7px;background:#fff}
+.placar svg{width:16px;height:16px}
+.nota details{grid-column:1/-1;font-size:13px;color:var(--tinta2)}
+.nota summary,.ach summary{cursor:pointer;min-height:44px;display:flex;align-items:center;gap:6px;list-style:none;font:700 12px/1 var(--cota);letter-spacing:.04em;text-transform:uppercase}
+.nota summary::-webkit-details-marker,.ach summary::-webkit-details-marker{display:none}
+.nota summary::before,.ach summary::before{content:"";width:0;height:0;border:5px solid transparent;border-left:7px solid var(--tinta)}
+.nota details[open] summary::before,.ach details[open] summary::before{transform:rotate(90deg)}
+.top3{border:1.5px solid var(--tinta);margin:0 0 12px;background:var(--papel)}
+.top3 h3{padding:8px 10px 0;margin:0}
+.top3 ol{list-style:none;margin:0;padding:6px 10px 10px;display:grid;gap:8px;counter-reset:t}
+.top3 li{counter-increment:t;display:grid;grid-template-columns:28px 1fr;gap:2px 8px;font-size:14px}
+.top3 li::before{content:counter(t);font:800 22px/1 var(--cond)}
+.top3 .mais{font:700 12px/1 var(--cota);color:var(--fio)}
+.achados{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ach{border:1.5px solid var(--tinta);padding:10px 10px 6px 42px;position:relative;background:#fff}
+.ach>svg{position:absolute;left:10px;top:10px;width:22px;height:22px}
+.ach.erro{border:3px solid var(--alerta);padding:8px 8px 4px 40px}
+.ach.erro>svg{left:8px;top:8px}
+.ach.atencao{border-style:dashed}
+.ach.recomendacao{border-style:dotted;background:var(--papel)}
+.ach h4{margin:0 0 2px}
+.ach p{margin:0 0 6px;font-size:14px}
+.ach details{font-size:12px;color:var(--tinta2)}
+.ach details p{font-size:12px;overflow-wrap:anywhere}
+
+/* sugestão e projeto */
+.form{display:grid;gap:10px}
+.form>button[type=submit]{position:sticky;bottom:0;z-index:3;box-shadow:0 -10px 10px -4px #fff}
+.form fieldset{border:1.5px solid var(--tinta);margin:0;padding:8px 10px 10px;min-width:0}
+.form legend{font:800 14px/1 var(--cond);text-transform:uppercase;padding:0 6px}
+.linha{display:grid;grid-template-columns:1fr 84px 84px;gap:6px;align-items:end;margin-bottom:6px}
+.linha label{display:block;font-size:13px}
+.linha label span{display:block;font:700 12px/1 var(--cota);color:var(--tinta2);margin-bottom:3px}
+.linha .nome{font-weight:700;display:flex;align-items:center;min-height:44px;gap:6px}
+.linha .nome svg{width:22px;height:22px}
+.pecas-linha{border-top:1px solid var(--ilhos);padding:8px 0}
+.pecas-linha h4{margin:0 0 4px}
+.pecas-linha .opcoes+.opcoes{margin-top:4px}
+.pecas-linha .n{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:13px}
+.pecas-linha .n input{width:76px}
+.radio{display:flex;gap:6px;flex-wrap:wrap}
+.radio .bt{flex:1}
+.cards{display:grid;gap:10px;margin-top:12px}
+.card-var{border:1.5px solid var(--tinta);background:#fff;padding:8px}
+.card-var h4{display:flex;justify-content:space-between;gap:8px;margin:0 0 6px}
+.card-var .mini{background:var(--papel);border:1px solid var(--tinta);margin-bottom:6px}
+.card-var .mini svg{display:block;width:100%;height:auto}
+.card-var .meta{font:600 12px/1.3 var(--cota);color:var(--tinta2);margin:0 0 6px}
+.passos{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}
+.passos li{border:1.5px solid var(--tinta);padding:8px 10px;font-size:14px;background:#fff;opacity:.4}
+.passos li.feito{opacity:1}
+.passos li.agora{opacity:1;border-width:3px;border-color:var(--fio)}
+.passos button{all:unset;cursor:pointer;display:block;width:100%}
+.passos button:focus-visible{outline:3px solid var(--fio);outline-offset:3px}
+.faltas{border:3px solid var(--tinta);border-style:double;padding:8px 10px;margin:10px 0 0;background:var(--papel);font-size:14px}
+.faltas ul{margin:4px 0 0;padding-left:18px}
+.linha.l4{grid-template-columns:repeat(3,minmax(0,1fr))}.linha.l4 .nome{grid-column:1 / -1}
+.so-esta{margin:4px 0 6px;padding-left:18px;font-size:13px;color:var(--tinta2)}
+.salvos{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px}
+.salvos li{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;border:1.5px solid var(--tinta);padding:4px 4px 4px 10px;background:#fff}
+.salvos small{display:block;font:500 12px/1.2 var(--cota);color:var(--tinta2)}
+.msg{font-size:14px;font-weight:600;margin:8px 0 0;min-height:20px}
+.msg.erro{color:var(--alerta)}
+.arquivo{position:relative;overflow:hidden}
+.arquivo input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.arquivo:focus-within{outline:3px solid var(--fio);outline-offset:2px}
+.medida{font:600 13px/1.4 var(--cota);white-space:pre-wrap;border:1.5px solid var(--tinta);padding:8px;margin-top:8px;background:#fff}
+details.passo-tablet{margin-top:10px;font-size:14px}
+details.passo-tablet summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:700}
+
+/* folha A4 (só na impressão e para o PNG) */
+#folha-a4{display:none}
+.a4{font:11pt/1.35 var(--sans);color:#000;background:#fff;width:100%}
+.a4 h1{font-size:22pt;margin:0 0 2mm}
+.a4 .sub{font:9pt/1.3 var(--cota);margin:0 0 4mm;color:#333}
+.a4 svg{width:100%;height:auto;border:.4mm solid #000}
+.a4 table{width:100%;border-collapse:collapse;font-size:8.5pt;margin:3mm 0}
+.a4 th,.a4 td{border-top:.3mm solid #000;padding:1mm 2mm;text-align:left;vertical-align:top}
+.a4 h2{font-size:13pt;margin:4mm 0 1mm}
+.a4 .rel{font-size:8.5pt;margin:0;padding:0;list-style:none}
+.a4 .rel li{margin:0 0 1.2mm;padding-left:5mm;position:relative}
+.a4 .rel li b{position:absolute;left:0}
+
+/* 1024: tablet deitado */
+@media (max-width:1180px){
+  .mesa-trab{grid-template-columns:224px minmax(0,1fr) 312px}
+  .col{padding:12px 12px 20px}
+  .biblio{grid-template-columns:1fr 1fr}
+  .barra .bt .txt,.vista .rotulo{display:none!important}
+  .abas button{font-size:13px;padding:0 4px}
+  .biblio .bt{font-size:12px;padding:4px 6px;gap:4px}
+  .vistas h2{display:none}
+}
+/* Dev1 r2 · tablet em pé (768): a planta tinha 232 px. A prancheta ganha a largura toda em cima; Molde e Cartão dividem a parte de baixo */
+@media (min-width:720px) and (max-width:900px){
+  .mesa-trab{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);grid-template-rows:minmax(0,56fr) minmax(0,44fr)}
+  .prancheta{grid-column:1 / -1;grid-row:1;border-bottom:1.5px solid var(--tinta)}
+  .molde-col{grid-column:1;grid-row:2;border-right:1.5px dashed var(--tinta)}
+  .cartao-col{grid-column:2;grid-row:2;border-left:0}
+}
+/* Dev1 r2: "Corrigir: Alargar a porta para 80 cm" passava da borda do cartão a 1024 e a 768 */
+.top3 .bt,.ach .bt{white-space:normal;text-align:left;height:auto;padding-top:6px;padding-bottom:6px}
+/* celular: só a consulta (planta e conferência) e abrir/exportar */
+@media (max-width:719px){
+  body{display:block;height:auto;overflow:auto}
+  .mesa-trab{display:block}
+  .molde-col,#v-3d,.vistas,.barra .grupo,#aba-pecas,#aba-sug,#p-pecas,#p-sug,.barra #b-salvar,.toast{display:none!important}
+  .prancheta{display:block}
+  #v-planta{flex:none}
+  #v-planta .palco{flex:none;height:min(80vw,440px)}
+  .cartao-col{border-left:0;border-top:1.5px solid var(--tinta);display:block}
+  .painel{overflow:visible;padding-top:30px}
+  .it{cursor:default}
+  .barra{padding:8px 16px}
+  .linha{grid-template-columns:1fr}
+}
+@media print{
+  @page{size:A4;margin:12mm}
+  html,body{height:auto;overflow:visible;background:#fff;display:block}
+  .barra,.mesa-trab,.toast,.pula,#teste-saida,.fantasma{display:none!important}
+  #folha-a4{display:block}
+}
+#teste-saida{position:fixed;z-index:30;right:8px;bottom:8px;max-width:min(760px,calc(100vw - 16px));max-height:70vh;overflow:auto;background:#fff;border:3px solid var(--tinta);font:12px/1.4 var(--cota);padding:10px;margin:0;white-space:pre-wrap}
+@media (prefers-reduced-motion:reduce){.cabide,.nota summary::before,.ach summary::before{transition:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="g-gancho" viewBox="0 0 60 22"><path d="M30 20 V12 M30 12 C30 4 40 4 40 9 M8 21 L30 13 L52 21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="g-calca-reta" viewBox="0 0 60 104"><path d="M14 2 H46 L48 102 H33 L30 30 L27 102 H12 Z" fill="currentColor" stroke="#141414" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 9 H46" stroke="#141414" stroke-width="1.5"/></symbol>
+  <symbol id="g-calca-wide" viewBox="0 0 60 104"><path d="M15 2 H45 L56 102 H34 L30 34 L26 102 H4 Z" fill="currentColor" stroke="#141414" stroke-width="1.8" stroke-linejoin="round"/><path d="M15 9 H45" stroke="#141414" stroke-width="1.5"/></symbol>
+  <symbol id="g-saia-longa" viewBox="0 0 60 104"><path d="M18 2 H42 L54 102 H6 Z" fill="currentColor" stroke="#141414" stroke-width="1.8" stroke-linejoin="round"/><path d="M18 9 H42" stroke="#141414" stroke-width="1.5"/></symbol>
+  <symbol id="g-vestido" viewBox="0 0 60 104"><path d="M22 2 L26 14 H34 L38 2 L44 6 L40 26 L52 102 H8 L20 26 L16 6 Z" fill="currentColor" stroke="#141414" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="g-blazer" viewBox="0 0 60 104"><path d="M18 4 L30 10 L42 4 L54 12 L50 40 L44 40 L45 70 H15 L16 40 L10 40 L6 12 Z" fill="currentColor" stroke="#141414" stroke-width="1.8" stroke-linejoin="round"/><path d="M30 10 L26 40 M30 10 L34 40" stroke="#141414" stroke-width="1.5"/></symbol>
+  <symbol id="g-camiseta" viewBox="0 0 60 104"><path d="M20 4 Q30 12 40 4 L54 14 L48 26 L42 22 V60 H18 V22 L12 26 L6 14 Z" fill="currentColor" stroke="#141414" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="g-dobrado" viewBox="0 0 60 16"><rect x="2" y="2" width="56" height="12" fill="currentColor" stroke="#141414" stroke-width="1.5"/><path d="M8 8 H52" stroke="#141414" stroke-width="1" opacity=".5"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 26 26"><circle cx="13" cy="13" r="12" fill="#141414"/><path d="M7 13.5 L11 17.5 L19 9" fill="none" stroke="#fff" stroke-width="2.6"/></symbol>
+  <symbol id="i-erro" viewBox="0 0 26 26"><path d="M13 2 L25 24 H1 Z" fill="#fff" stroke="#A3231B" stroke-width="2.4" stroke-linejoin="round"/><path d="M13 10 V16" stroke="#A3231B" stroke-width="2.6"/><circle cx="13" cy="19.6" r="1.6" fill="#A3231B"/></symbol>
+  <symbol id="i-atencao" viewBox="0 0 26 26"><circle cx="13" cy="13" r="11" fill="#fff" stroke="#141414" stroke-width="2.2" stroke-dasharray="4 3"/><path d="M13 7 V14" stroke="#141414" stroke-width="2.6"/><circle cx="13" cy="18.4" r="1.6" fill="#141414"/></symbol>
+  <symbol id="i-recomendacao" viewBox="0 0 26 26"><path d="M13 2 L24 13 L13 24 L2 13 Z" fill="#fff" stroke="#141414" stroke-width="2" stroke-linejoin="round"/><circle cx="13" cy="8.6" r="1.6" fill="#141414"/><path d="M13 12 V18" stroke="#141414" stroke-width="2.4"/></symbol>
+  <symbol id="i-dobra" viewBox="0 0 22 22"><rect x="2" y="12" width="18" height="4" fill="#fff" stroke="#141414" stroke-width="1.6"/><rect x="2" y="16" width="18" height="4" fill="#fff" stroke="#141414" stroke-width="1.6"/><rect x="2" y="8" width="18" height="4" fill="#141414"/></symbol>
+  <symbol id="i-pendura" viewBox="0 0 22 22"><path d="M11 5 V2 M3 9 L11 5 L19 9" fill="none" stroke="#141414" stroke-width="1.8"/><path d="M5 9 H17 L18 21 H4 Z" fill="#141414"/></symbol>
+  <symbol id="i-look" viewBox="0 0 22 22"><circle cx="11" cy="4" r="2.4" fill="none" stroke="#141414" stroke-width="1.6"/><path d="M6 8 H16 L14 15 H8 Z M11 15 V20" fill="none" stroke="#141414" stroke-width="1.6"/></symbol>
+  <symbol id="i-esq" viewBox="0 0 18 18"><path d="M12 3 L5 9 L12 15" fill="none" stroke="currentColor" stroke-width="2.6"/></symbol>
+  <symbol id="i-dir" viewBox="0 0 18 18"><path d="M6 3 L13 9 L6 15" fill="none" stroke="currentColor" stroke-width="2.6"/></symbol>
+  <symbol id="i-desfaz" viewBox="0 0 18 18"><path d="M6 4 L2 8 L6 12 M2 8 H11 A5 5 0 0 1 11 18" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-refaz" viewBox="0 0 18 18"><path d="M12 4 L16 8 L12 12 M16 8 H7 A5 5 0 0 0 7 18" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-troca" viewBox="0 0 18 18"><path d="M3 6 H14 M11 3 L14 6 L11 9 M15 12 H4 M7 9 L4 12 L7 15" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="t-parede" viewBox="0 0 26 26"><rect x="2" y="10" width="22" height="6" fill="#fff" stroke="#141414" stroke-width="1.8"/></symbol>
+  <symbol id="t-arara_reta" viewBox="0 0 26 26"><path d="M3 6 H23 M5 6 V24 M21 6 V24 M2 24 H8 M18 24 H24" fill="none" stroke="#141414" stroke-width="1.8"/><path d="M8 7 V18 M11 7 V18 M14 7 V18 M17 7 V18" stroke="#141414" stroke-width="1.2"/></symbol>
+  <symbol id="t-arara_parede" viewBox="0 0 26 26"><path d="M2 4 H24 M5 4 V9 M21 4 V9 M4 9 H22" fill="none" stroke="#141414" stroke-width="1.8"/><path d="M8 9 V20 M11 9 V20 M14 9 V20 M17 9 V20" stroke="#141414" stroke-width="1.2"/></symbol>
+  <symbol id="t-arara_circular" viewBox="0 0 26 26"><circle cx="13" cy="13" r="10" fill="none" stroke="#141414" stroke-width="1.8"/><circle cx="13" cy="13" r="2" fill="#141414"/><path d="M13 3 V6 M13 20 V23 M3 13 H6 M20 13 H23" stroke="#141414" stroke-width="1.4"/></symbol>
+  <symbol id="t-mesa" viewBox="0 0 26 26"><path d="M2 10 H24 M4 10 V23 M22 10 V23" fill="none" stroke="#141414" stroke-width="1.8"/><rect x="7" y="6" width="12" height="4" fill="#141414"/></symbol>
+  <symbol id="t-gondola" viewBox="0 0 26 26"><path d="M3 3 V23 M23 3 V23 M3 9 H23 M3 16 H23 M3 23 H23" fill="none" stroke="#141414" stroke-width="1.8"/><rect x="6" y="5" width="6" height="4" fill="#141414"/><rect x="14" y="12" width="6" height="4" fill="#141414"/></symbol>
+  <symbol id="t-manequim" viewBox="0 0 26 26"><circle cx="13" cy="4" r="2.6" fill="none" stroke="#141414" stroke-width="1.6"/><path d="M8 8 H18 L16 16 H10 Z M13 16 V23 M8 24 H18" fill="none" stroke="#141414" stroke-width="1.6"/></symbol>
+  <symbol id="t-vitrine" viewBox="0 0 26 26"><path d="M2 4 H24 V21 H2 Z M2 21 H24" fill="none" stroke="#141414" stroke-width="1.8"/><circle cx="13" cy="9" r="2" fill="none" stroke="#141414" stroke-width="1.4"/><path d="M10 12 H16 L15 18 H11 Z" fill="none" stroke="#141414" stroke-width="1.4"/></symbol>
+  <symbol id="t-provador" viewBox="0 0 26 26"><path d="M3 24 V3 H23 V24" fill="none" stroke="#141414" stroke-width="1.8"/><path d="M6 4 Q8 14 6 24 M10 4 Q12 14 10 24 M14 4 Q16 14 14 24" fill="none" stroke="#141414" stroke-width="1.2"/></symbol>
+  <symbol id="t-caixa" viewBox="0 0 26 26"><path d="M2 12 H24 V22 H2 Z M5 12 V7 H15 V12" fill="none" stroke="#141414" stroke-width="1.8"/><rect x="17" y="15" width="5" height="3" fill="#141414"/></symbol>
+  <symbol id="t-porta" viewBox="0 0 26 26"><path d="M3 22 H23 M6 22 V4 M6 22 A16 16 0 0 0 22 6" fill="none" stroke="#141414" stroke-width="1.8"/></symbol>
+</svg>
+
+<a class="pula" href="#aba-conf">Ir para a conferência</a>
+<a class="pula" href="#planta" id="pula-planta" style="left:240px">Ir para a planta</a>
+<header class="barra">
+  <div class="tit"><h1>Mindse7 · área de venda</h1><p class="proj" id="nome-proj">Corner Mindse7</p></div>
+  <div class="grupo" role="group" aria-label="Carregar um exemplo">
+    <button class="bt" type="button" data-ex="passa">Exemplo A</button><button class="bt" type="button" data-ex="erro">B · com erro</button><button class="bt" type="button" data-ex="limite">C · limite</button>
+  </div>
+  <div class="grupo">
+    <button class="bt" type="button" id="b-desfaz" title="Desfazer (Ctrl+Z)"><svg aria-hidden="true"><use href="#i-desfaz"/></svg><span class="txt">Desfazer</span></button><button class="bt" type="button" id="b-refaz" title="Refazer (Ctrl+Shift+Z)"><svg aria-hidden="true"><use href="#i-refaz"/></svg><span class="txt">Refazer</span></button>
+  </div>
+  <button class="bt primario" type="button" id="b-salvar">Salvar</button>
+</header>
+
+<main class="mesa-trab">
+  <aside class="col molde-col" aria-label="Molde: montar a área">
+    <span class="sup">Molde · faça</span>
+    <h2>Montar</h2>
+    <div class="biblio" id="biblio"></div>
+    <h3>Na área</h3>
+    <ul class="lista-itens" id="lista-itens"></ul>
+    <div id="painel-item"></div>
+    <p class="ajuda" id="ajuda-teclado">Com um item escolhido: <kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd> movem 10 cm (<kbd>Shift</kbd> 50), <kbd>R</kbd> gira 15°, <kbd>D</kbd> duplica, <kbd>Delete</kbd> apaga, <kbd>Ctrl</kbd>+<kbd>Z</kbd> desfaz. Tudo encaixa na grade de 10 cm. No toque, use os botões do item.</p>
+  </aside>
+
+  <section class="prancheta" id="prancheta" data-vista="dividida" aria-label="Prancheta">
+    <div class="vistas">
+      <h2>Prancheta</h2>
+      <span class="fio-leg"><svg viewBox="0 0 34 10" aria-hidden="true"><path d="M1 5 H33" stroke="#0B6E4F" stroke-width="2.5" stroke-dasharray="6 4"/></svg>fio 90 cm</span>
+      <div class="grupo" role="group" aria-label="Vista">
+        <button class="bt" type="button" data-vista="planta" aria-pressed="false">Planta</button><button class="bt" type="button" data-vista="dividida" aria-pressed="true">Planta + 3D</button><button class="bt" type="button" data-vista="tres" aria-pressed="false">3D</button>
+      </div>
+      <button class="bt" type="button" id="b-troca" aria-pressed="false" title="Dá ao 3D 60% da área"><svg aria-hidden="true"><use href="#i-troca"/></svg><span class="txt">Trocar</span></button>
+    </div>
+    <div class="vista" id="v-planta"><span class="rotulo">Molde · planta em cm</span>
+      <div class="palco"><svg id="planta" role="application" aria-label="Planta da área. Escolha o item na lista à esquerda; com ele escolhido, as setas movem 10 cm."></svg></div>
+    </div>
+    <div class="vista" id="v-3d"><span class="rotulo">Cartão · prova 3D</span>
+      <div class="palco"><canvas id="cena" tabindex="0" aria-label="Vista 3D da área. Arraste um item para mover, as alças verdes mudam largura, profundidade e altura; arraste o fundo para girar a câmera. Com um item escolhido, as setas movem."></canvas>
+        <p class="dica-cena" id="dica-cena">Arraste o fundo para girar · roda aproxima · alças verdes = medidas</p></div>
+    </div>
+    <p class="toast" id="toast" hidden></p>
+  </section>
+
+  <aside class="cartao-col" aria-label="Cartão: conferir, peças, sugestão e projeto">
+    <div class="abas" role="tablist" aria-label="Painéis do cartão">
+      <button type="button" role="tab" id="aba-conf" aria-controls="p-conf" aria-selected="true">Conferir<span class="n" id="n-erros" hidden></span></button>
+      <button type="button" role="tab" id="aba-pecas" aria-controls="p-pecas" aria-selected="false" tabindex="-1">Peças</button>
+      <button type="button" role="tab" id="aba-sug" aria-controls="p-sug" aria-selected="false" tabindex="-1">Sugestão</button>
+      <button type="button" role="tab" id="aba-proj" aria-controls="p-proj" aria-selected="false" tabindex="-1">Projeto</button>
+    </div>
+    <section class="painel" id="p-conf" role="tabpanel" aria-labelledby="aba-conf">
+      <span class="sup">Cartão · confira</span>
+      <div id="nota"></div>
+      <div id="top3"></div>
+      <ul class="achados" id="achados"></ul>
+    </section>
+    <section class="painel" id="p-pecas" role="tabpanel" aria-labelledby="aba-pecas" hidden>
+      <span class="sup">Cartão · peças</span>
+      <div id="painel-pecas"></div>
+      <h3 style="margin:18px 0 6px">Catálogo</h3>
+      <p class="ajuda" style="margin:0 0 8px">Escolha cor e tamanho e toque em <b>Pôr</b>, ou arraste a amostra até uma arara, mesa, gôndola, manequim ou vitrine na planta ou no 3D.</p>
+      <ul class="catalogo" id="catalogo"></ul>
+    </section>
+    <section class="painel" id="p-sug" role="tabpanel" aria-labelledby="aba-sug" hidden>
+      <span class="sup">Cartão · sugestão</span>
+      <h2>Montagem automática</h2>
+      <p class="ajuda" style="margin:0 0 10px">Diga o que você tem. Eu monto até 3 jeitos, todos conferidos pelas mesmas regras, e explico cada escolha. Mesma entrada, mesma saída.</p>
+      <form class="form" id="form-sug" autocomplete="off"></form>
+      <div id="sug-saida"></div>
+    </section>
+    <section class="painel" id="p-proj" role="tabpanel" aria-labelledby="aba-proj" hidden>
+      <span class="sup">Cartão · projeto</span>
+      <h2>Projeto</h2>
+      <label class="ajuda" for="in-nome" style="display:block;margin:0 0 4px">Nome do projeto</label>
+      <input type="text" id="in-nome" maxlength="60">
+      <div class="acoes"><button class="bt primario" type="button" id="b-salvar2">Salvar neste aparelho</button>
+        <button class="bt" type="button" id="b-json">Exportar JSON</button>
+        <span class="bt arquivo">Importar JSON<input type="file" id="in-json" accept="application/json,.json" aria-label="Importar projeto em JSON"></span></div>
+      <p class="msg" id="msg-proj" role="status"></p>
+      <h3>Salvos neste aparelho</h3>
+      <ul class="salvos" id="salvos"></ul>
+      <h3>Exportar a planta</h3>
+      <p class="ajuda" style="margin:0 0 6px">Folha A4 com a planta, a lista de itens e o relatório da conferência.</p>
+      <div class="acoes"><button class="bt" type="button" id="b-png">PNG A4</button><button class="bt" type="button" id="b-pdf">PDF (imprimir)</button></div>
+      <h3>Desempenho</h3>
+      <p class="ajuda" style="margin:0 0 6px">Carrega 40 itens e 200 peças, gira a câmera por 10 s e mede. Seu projeto volta depois.</p>
+      <div class="acoes"><button class="bt" type="button" id="b-fps">Medir fps (10 s)</button></div>
+      <pre class="medida" id="saida-fps" hidden></pre>
+      <details class="passo-tablet"><summary>Levar para o tablet da loja</summary>
+        <ol class="ajuda"><li>Copie <b>simulador.html</b> para o tablet (cabo, pendrive, e-mail para si mesmo ou sua nuvem).</li><li>Abra o arquivo pelo app Arquivos do tablet, com o Chrome.</li><li>Confira abrindo <b>#teste</b> no fim do endereço: deve aparecer tudo OK. Salvar usa a memória do navegador; use <b>Exportar JSON</b> para guardar uma cópia.</li></ol>
+        <p class="ajuda">Ainda não foi testado em um tablet de verdade.</p></details>
+    </section>
+  </aside>
+</main>
+<p class="sr" id="vivo" aria-live="polite"></p>
+<pre id="teste-saida" hidden></pre>
+<div id="folha-a4" aria-hidden="true"></div>
+
+<script src="libs/three.min.js"></script>
+<script src="libs/OrbitControls.js"></script>
+<script src="libs/gsap.min.js"></script>
+<script src="libs/Draggable.min.js"></script>
+<script src="js/dados.js"></script>
+<script src="js/regras.js"></script>
+<script src="js/sugestao.js"></script>
+<script src="js/cena.js"></script>
+<script src="js/planta.js"></script>
+<script src="js/exportar.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/teste.js"></script>
+</body>
+</html>
